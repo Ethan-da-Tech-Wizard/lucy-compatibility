@@ -2,7 +2,6 @@
 # ==============================================================================
 # Program: rr_gap_audit.py
 # Programmer: Ethan-da-Tech-Wizard
-# Course: CIS 156 / Advanced Systems
 # Last Modified: November 18, 2026
 # Purpose: Audit gap analysis and move fixture validation for Pokémon registries
 # ==============================================================================

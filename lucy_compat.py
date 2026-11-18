@@ -2,7 +2,6 @@
 # ==============================================================================
 # Program: lucy_compat.py
 # Programmer: Ethan-da-Tech-Wizard
-# Course: CIS 156 / Advanced Systems
 # Last Modified: November 18, 2026
 # Purpose: Inspects Minecraft mod JAR metadata for loader and version compatibility
 # ==============================================================================
@@ -20,33 +19,48 @@ META = ('fabric.mod.json', 'META-INF/neoforge.mods.toml', 'META-INF/mods.toml')
 
 
 def version(v):
+    ## Validate input format: must be string of dot-separated integers (e.g. '1.20.1')
     if not isinstance(v, str) or not re.fullmatch(r'\d+(?:\.\d+)*', v):
         return None
+    ## Parse each segment into an integer tuple to allow natural numerical comparisons
     return tuple(int(x) for x in v.split('.'))
 
 
 def cmp_version(a, b):
+    ## Normalize tuple lengths with trailing zeros so that (1, 20) matches (1, 20, 0)
     n = max(len(a), len(b))
     a, b = a + (0,) * (n-len(a)), b + (0,) * (n-len(b))
+    ## Three-way comparison operator returning -1, 0, or 1
     return (a > b) - (a < b)
 
 
 def accepts(spec, target):
-    """Known Maven ranges and exact numeric versions; uncertainty stays unknown."""
+    """Known Maven ranges and exact numeric versions; uncertainty stays unknown.
+    
+    Parameters:
+        spec (str): Version requirement (e.g. '1.20.1', '[1.20, 1.21)', '(, 1.19.4]').
+        target (str): Concrete Minecraft version string to test against the specification.
+    Returns:
+        bool | None: True if satisfied, False if violated, None if unparseable / ambiguous.
+    """
     t = version(target)
     if t is None or not isinstance(spec, str):
         return None
     spec = spec.strip()
     v = version(spec)
+    ## Exact version equality check
     if v is not None:
         return cmp_version(t, v) == 0
+    ## Parse Maven-style interval notation: [lower, upper], (lower, upper), etc.
     m = re.fullmatch(r'([\[(])\s*(\d+(?:\.\d+)*)?\s*,\s*(\d+(?:\.\d+)*)?\s*([\])])', spec)
     if not m or (not m[2] and not m[3]):
         return None
+    ## Validate lower boundary condition (inclusive vs exclusive)
     if m[2]:
         c = cmp_version(t, version(m[2]))
         if c < 0 or (c == 0 and m[1] == '('):
             return False
+    ## Validate upper boundary condition (inclusive vs exclusive)
     if m[3]:
         c = cmp_version(t, version(m[3]))
         if c > 0 or (c == 0 and m[4] == ')'):
@@ -55,6 +69,7 @@ def accepts(spec, target):
 
 
 def sha256(path):
+    ## Stream file contents in 64 KiB buffers to calculate SHA-256 with O(1) memory overhead
     h = hashlib.sha256()
     with path.open('rb') as f:
         while True:

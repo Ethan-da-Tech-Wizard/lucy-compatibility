@@ -2,7 +2,6 @@
 # ==============================================================================
 # Program: registry_audit.py
 # Programmer: Ethan-da-Tech-Wizard
-# Course: CIS 156 / Advanced Systems
 # Last Modified: November 18, 2026
 # Purpose: Radical Red registry audit against verified species and move fixtures
 # ==============================================================================
