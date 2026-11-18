@@ -1,0 +1,42 @@
+{
+  "source_repo": "RadicalRedShowdown/pokemon-showdown",
+  "revision": "54955790eb71a0fb0a881850f1e8afed3bfe25bd",
+  "basis": "Independent source-backed literal fields; not game-effect verification.",
+  "fixtures": [
+    {
+      "id": "inferno",
+      "basePower": 120,
+      "accuracy": 50,
+      "pp": 5,
+      "category": "Special",
+      "type": "Fire",
+      "secondary": {
+        "chance": 100,
+        "status": "brn"
+      }
+    },
+    {
+      "id": "nightdaze",
+      "basePower": 95,
+      "accuracy": 100,
+      "secondary": null
+    },
+    {
+      "id": "protect",
+      "accuracy": true,
+      "priority": 4
+    },
+    {
+      "id": "guillotine",
+      "ohko": false,
+      "basePower": 1
+    },
+    {
+      "id": "beatup",
+      "multihit": [
+        2,
+        5
+      ]
+    }
+  ]
+}
