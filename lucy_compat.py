@@ -89,8 +89,8 @@ def accepts(spec, target):
 
 def sha256(path):
     """Return the hex SHA-256 of the file at `path`, reading it in chunks."""
-    # NOTE: the chunk size below is 1 MiB (the original comment says 64 KiB).
-    ## Stream file contents in 64 KiB buffers to calculate SHA-256 with O(1) memory overhead
+    # Stream the file in 1 MiB chunks (f.read(1024 * 1024) below) so SHA-256 needs O(1) memory
+    # regardless of jar size.
     h = hashlib.sha256()
     with path.open('rb') as f:
         while True:
